@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Bandeiras do Mundo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Tela Inicial -->
+        <div id="start-screen" class="screen active">
+            <div class="header">
+                <i class="fas fa-flag"></i>
+                <h1>Quiz de Bandeiras do Mundo</h1>
+                <p class="subtitle">Teste seus conhecimentos sobre as bandeiras dos países</p>
+            </div>
+            
+            <div class="difficulty-selection">
+                <h3>Escolha o modo de jogo:</h3>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn" data-level="easy">
+                        <i class="fas fa-star"></i>
+                        <span>Fácil</span>
+                        <small>10 perguntas - Países famosos</small>
+                    </button>
+                    <button class="difficulty-btn" data-level="medium">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <span>Médio</span>
+                        <small>15 perguntas - Mix de países</small>
+                    </button>
+                    <button class="difficulty-btn" data-level="hard">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <span>Difícil</span>
+                        <small>20 perguntas - Países menos conhecidos</small>
+                    </button>
+                    <button class="difficulty-btn time-attack-btn" data-level="timeattack">
+                        <i class="fas fa-clock"></i>
+                        <span>Contrarrelógio</span>
+                        <small>60 segundos - Máximo de acertos</small>
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-preview">
+                <div class="stat-item">
+                    <i class="fas fa-trophy"></i>
+                    <span>Melhor Pontuação: <span id="best-score">0</span></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Jogos Realizados: <span id="games-played">0</span></span>
+                </div>
+                <button class="stats-btn" id="view-stats-btn">
+                    <i class="fas fa-chart-bar"></i>
+                    Ver Estatísticas Detalhadas
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela do Quiz -->
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-header">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">1 / 10</span>
+                </div>
+                
+                <div class="score-board">
+                    <div class="score-item correct">
+                        <i class="fas fa-check"></i>
+                        <span id="correct-count">0</span>
+                    </div>
+                    <div class="score-item incorrect">
+                        <i class="fas fa-times"></i>
+                        <span id="incorrect-count">0</span>
+                    </div>
+                    <div class="timer" id="timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="time-left">30</span>s
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <h2 id="question-text">De qual país é esta bandeira?</h2>
+                <div class="flag-container">
+                    <img id="flag-image" src="" alt="Bandeira do país" class="flag-image">
+                </div>
+                
+                <div class="answer-options" id="answer-options">
+                    <!-- Opções serão inseridas dinamicamente -->
+                </div>
+                
+                <div class="hint-container">
+                    <button class="hint-btn" id="hint-btn">
+                        <i class="fas fa-lightbulb"></i>
+                        Dica (custa 5 pontos)
+                    </button>
+                    <p class="hint-text" id="hint-text"></p>
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Tela de Resultados -->
+        <div id="result-screen" class="screen">
+            <div class="result-container">
+                <div class="result-header">
+                    <i class="fas fa-trophy result-icon" id="result-icon"></i>
+                    <h2 id="result-title">Parabéns!</h2>
+                    <p id="result-message">Você completou o quiz!</p>
+                </div>
+                
+                <div class="result-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle"></i>
+                        <h3 id="final-correct">0</h3>
+                        <p>Acertos</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-times-circle"></i>
+                        <h3 id="final-incorrect">0</h3>
+                        <p>Erros</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-percentage"></i>
+                        <h3 id="final-percentage">0%</h3>
+                        <p>Precisão</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <h3 id="final-score">0</h3>
+                        <p>Pontuação</p>
+                    </div>
+                </div>
+                
+                <div class="result-actions">
+                    <button class="action-btn primary" id="play-again-btn">
+                        <i class="fas fa-redo"></i>
+                        Jogar Novamente
+                    </button>
+                    <button class="action-btn secondary" id="change-difficulty-btn">
+                        <i class="fas fa-cog"></i>
+                        Mudar Dificuldade
+                    </button>
+                    <button class="action-btn secondary" id="share-btn">
+                        <i class="fas fa-share"></i>
+                        Compartilhar Resultado
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Estatísticas -->
+        <div id="stats-screen" class="screen">
+            <div class="header">
+                <i class="fas fa-chart-bar"></i>
+                <h1>Estatísticas Detalhadas</h1>
+                <p class="subtitle">Acompanhe seu progresso e performance</p>
+            </div>
+
+            <div class="stats-container">
+                <div class="stats-section">
+                    <h3><i class="fas fa-trophy"></i> Resumo Geral</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-games">0</div>
+                            <div class="stat-label">Jogos Realizados</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-questions">0</div>
+                            <div class="stat-label">Perguntas Respondidas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-correct">0</div>
+                            <div class="stat-label">Respostas Corretas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="accuracy-rate">0%</div>
+                            <div class="stat-label">Taxa de Acerto</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <h3><i class="fas fa-medal"></i> Melhores Pontuações</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="best-easy">0</div>
+                            <div class="stat-label">Fácil</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="best-medium">0</div>
+                            <div class="stat-label">Médio</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="best-hard">0</div>
+                            <div class="stat-label">Difícil</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="best-timeattack">0</div>
+                            <div class="stat-label">Contrarrelógio</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <h3><i class="fas fa-clock"></i> Tempo e Performance</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="avg-time">0s</div>
+                            <div class="stat-label">Tempo Médio por Resposta</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="fastest-answer">0s</div>
+                            <div class="stat-label">Resposta Mais Rápida</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="longest-streak">0</div>
+                            <div class="stat-label">Maior Sequência</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="hints-used">0</div>
+                            <div class="stat-label">Dicas Utilizadas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <h3><i class="fas fa-globe"></i> Performance por Continente</h3>
+                    <div class="continent-stats" id="continent-stats">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+
+                <div class="stats-actions">
+                    <button class="action-btn primary" id="back-to-menu-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar ao Menu
+                    </button>
+                    <button class="action-btn secondary" id="reset-stats-btn">
+                        <i class="fas fa-trash"></i>
+                        Resetar Estatísticas
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="css/script.js"></script>
+</body>
+</html>
+
